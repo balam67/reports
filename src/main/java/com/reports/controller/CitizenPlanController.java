@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.reports.utils.EmailSenderPdf;
 import com.reports.utils.ExportExcel;
+import com.reports.utils.ExportExcelOnfly;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
@@ -44,6 +45,8 @@ public class CitizenPlanController {
 	
 	@Autowired
 	private ExportPdf exportPdf;
+	@Autowired
+	private ExportExcelOnfly exportExcelOnfly;
 	
 	@GetMapping("/")
 	public String indexPage(Model model) {
@@ -135,6 +138,25 @@ public class CitizenPlanController {
 	                .contentType(MediaType.APPLICATION_PDF)
 	                .body(new InputStreamResource(bis));
 	    }
+	 
+	 
+	 
+	 
+	 @GetMapping("/onflyexcel")
+		public void onFlyExcel(HttpServletResponse response) throws IOException, MessagingException {
+			response.setContentType("application/octet-stream");
+			DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+			String currentDateTime = dateFormatter.format(new Date());
+
+			String headerKey = "Content-Disposition";
+			String headerValue = "attachment; filename=records_" + currentDateTime + ".xlsx";
+			response.setHeader(headerKey, headerValue);
+
+			List<CitizenPlanEntity> convertExcelList = citizenPlanService.convertExcel();
+			
+			
+			exportExcelOnfly.writeListToExcel(convertExcelList);
+		}
 }
 
 

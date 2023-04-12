@@ -1,10 +1,13 @@
 package com.reports.utils;
 
 import com.lowagie.text.pdf.PdfPTable;
+import java.io.ByteArrayOutputStream;
 import com.reports.entity.CitizenPlanEntity;
 
 import java.awt.Color;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
  
 import javax.servlet.http.HttpServletResponse;
@@ -58,7 +61,11 @@ public class ExportPdf {
     }
      
     public void export(HttpServletResponse response) throws DocumentException, IOException {
-        Document document = new Document(PageSize.A4);
+       
+    
+    	
+    	Document document = new Document(PageSize.A4);
+    	PdfWriter.getInstance(document, new FileOutputStream("D:\\pdf/file.pdf"));
         PdfWriter.getInstance(document, response.getOutputStream());
          
         document.open();
